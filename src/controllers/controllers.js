@@ -1,4 +1,5 @@
 const contacts = require("../../models/contacts");
+const { RequesError } = require("../../helpers/RequestError");
 
 const getContacts = async (req, res, next) => {
   try {
@@ -15,16 +16,14 @@ const getContactsById = async (req, res, next) => {
     const { contactId } = req.params;
 
     const contact = await contacts.getContactById(contactId);
+
     if (!contact) {
-      return res.status(404).json({
-        message: "Not found",
-      });
+      throw RequesError(404, "Not found");
     }
+
     res.status(200).json(contact);
   } catch (error) {
-    res.status(500).json({
-      message: "Server error",
-    });
+    next(error);
   }
 };
 
@@ -33,9 +32,7 @@ const addContacts = async (req, res, next) => {
     const addContacts = await contacts.addContact(req.body);
     res.status(201).json(addContacts);
   } catch (error) {
-    res.status(500).json({
-      message: "Server error",
-    });
+    next(error);
   }
 };
 
@@ -43,16 +40,9 @@ const apdateContacts = async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const apdateContact = await contacts.updateContact(contactId, req.body);
-    if (!apdateContact) {
-      return res.status(404).json({
-        message: "Not found",
-      });
-    }
     res.status(200).json(apdateContact);
   } catch (error) {
-    res.status(500).json({
-      message: "Server error",
-    });
+    next(error);
   }
 };
 
@@ -62,15 +52,11 @@ const removeContacts = async (req, res, next) => {
     const deleteContacts = await contacts.removeContact(contactId);
 
     if (!deleteContacts) {
-      return res.status(404).json({
-        message: "Not found",
-      });
+      throw RequesError(404, "Not found");
     }
     res.status(200).json({ message: "contact deleted" });
   } catch (error) {
-    res.status(500).json({
-      message: "Server error",
-    });
+    next(error);
   }
 };
 

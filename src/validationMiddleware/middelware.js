@@ -1,45 +1,21 @@
 const Joi = require("joi");
 
+const { RequesError } = require("../../helpers/index");
+
 module.exports = {
-  postValidation: (req, res, next) => {
+  bodyValidation: (req, res, next) => {
     const schema = Joi.object({
-      name: Joi.string().min(2).max(20).required(),
-      email: Joi.string()
-        .email({
-          minDomainSegments: 2,
-          tlds: { allow: ["com", "net", "ca", "org", "uk"] },
-        })
-        .required(),
-      phone: Joi.number().required(),
+      name: Joi.string(),
+      email: Joi.string().email,
+      phone: Joi.number(),
     });
+
     const { error } = schema.validate(req.body);
 
     if (error) {
-      res.status(400).json({
-        message: "missing required field",
-      });
+      throw RequesError(400, error.message);
     }
-    next();
-  },
 
-  putValidation: (req, res, next) => {
-    const schema = Joi.object({
-      name: Joi.string().min(2).max(20).required(),
-      email: Joi.string()
-        .email({
-          minDomainSegments: 2,
-          tlds: { allow: ["com", "net", "ca", "org", "uk"] },
-        })
-        .required(),
-      phone: Joi.number().required(),
-    });
-    const { error } = schema.validate(req.body);
-
-    if (error) {
-      res.status(400).json({
-        message: "missing fields",
-      });
-    }
-    next();
+    next(error);
   },
 };
