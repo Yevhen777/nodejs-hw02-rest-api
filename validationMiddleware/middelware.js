@@ -1,6 +1,6 @@
 const Joi = require("joi");
 
-const { RequesError } = require("../../helpers/index");
+const { RequesError } = require("../helpers/index");
 
 module.exports = {
   bodyValidation: (req, res, next) => {

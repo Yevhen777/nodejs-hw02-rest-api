@@ -11,5 +11,13 @@ const RequestError = (status, message = messages[status]) => {
   error.status = status;
   return error;
 };
+const asyncWrapper = (controller) => {
+  return (req, res, next) => {
+    controller(req, res).catch(next);
+  };
+};
 
-module.exports = RequestError;
+module.exports = {
+  RequestError,
+  asyncWrapper,
+};
