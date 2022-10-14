@@ -2,12 +2,8 @@ const contacts = require("../models/contacts");
 const { RequesError } = require("../helpers/RequestError");
 
 const getContacts = async (req, res, next) => {
-  try {
-    const allContacts = await contacts.listContacts();
-    res.status(200).json(allContacts);
-  } catch (error) {
-    next(error);
-  }
+  const allContacts = await contacts.listContacts();
+  res.status(200).json(allContacts);
 };
 const getContactsById = async (req, res, next) => {
   const { contactId } = req.params;
