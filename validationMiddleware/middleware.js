@@ -22,4 +22,17 @@ module.exports = {
 
     next(error);
   },
+  updateFavoriteSchema: (req, res, next) => {
+    const schema = Joi.object({
+      favorite: Joi.boolean().required(),
+    });
+
+    const { error } = schema.validate(req.body);
+
+    if (error) {
+      throw RequesError(400, error.details);
+    }
+
+    next(error);
+  },
 };
