@@ -10,17 +10,24 @@ const {
   updateStatusContact,
 } = require("../../controllers/controllers");
 
-const { bodyValidation } = require("../../validationMiddleware/middleware");
+const {
+  schemaContact,
+  schemaContactFavorite,
+} = require("../../models/contacts");
 
-const { updateFavoriteSchema } = require("../../helpers/handleSaveError");
+const validationBody = require("../../validationMiddleware/middleware");
 
 router.get("/", asyncWrapper(getContacts));
 router.get("/:contactId", asyncWrapper(getContactsById));
-router.post("/", bodyValidation, asyncWrapper(addContacts));
-router.put("/:contactId", bodyValidation, asyncWrapper(apdateContacts));
+router.post("/", validationBody(schemaContact), asyncWrapper(addContacts));
+router.put(
+  "/:contactId",
+  validationBody(schemaContact),
+  asyncWrapper(apdateContacts)
+);
 router.patch(
   "/:contactId/favorite",
-  updateFavoriteSchema,
+  validationBody(schemaContactFavorite),
   asyncWrapper(updateStatusContact)
 );
 router.delete("/:contactId", asyncWrapper(removeContacts));
