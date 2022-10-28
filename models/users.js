@@ -25,11 +25,14 @@ const userShema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-const User = model("User", userShema);
+const User = model("user", userShema);
 
 const schemaRegister = Joi.object({
   password: Joi.string().min(5).required(),
   email: Joi.string().email().required(),
+  subscription: Joi.string()
+    .valid("starter", "pro", "business")
+    .default("starter"),
 });
 const schemaLogin = Joi.object({
   password: Joi.string().min(5).required(),
