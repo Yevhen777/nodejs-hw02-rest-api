@@ -7,14 +7,37 @@ const {
   addContacts,
   apdateContacts,
   removeContacts,
+  updateStatusContact,
 } = require("../../controllers/controllers");
 
-const { bodyValidation } = require("../../validationMiddleware/middelware");
+const {
+  schemaContact,
+  schemaContactFavorite,
+} = require("../../models/contacts");
 
-router.get("/", asyncWrapper(getContacts));
-router.get("/:contactId", asyncWrapper(getContactsById));
-router.post("/", bodyValidation, asyncWrapper(addContacts));
-router.put("/:contactId", bodyValidation, asyncWrapper(apdateContacts));
+const validationBody = require("../../validationMiddleware/middleware");
+const authenticate = require("../../validationMiddleware/authenticate");
+
+router.get("/", authenticate, asyncWrapper(getContacts));
+router.get("/:contactId", authenticate, asyncWrapper(getContactsById));
+router.post(
+  "/",
+  authenticate,
+  validationBody(schemaContact),
+  asyncWrapper(addContacts)
+);
+router.put(
+  "/:contactId",
+  authenticate,
+  validationBody(schemaContact),
+  asyncWrapper(apdateContacts)
+);
+router.patch(
+  "/:contactId/favorite",
+  authenticate,
+  validationBody(schemaContactFavorite),
+  asyncWrapper(updateStatusContact)
+);
 router.delete("/:contactId", asyncWrapper(removeContacts));
 
 module.exports = router;
