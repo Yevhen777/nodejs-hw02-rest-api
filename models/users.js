@@ -21,6 +21,9 @@ const userShema = new Schema(
       type: String,
       default: null,
     },
+    // avatarURL: {
+    //   avatarURL: String,
+    // },
   },
   { versionKey: false, timestamps: true }
 );
@@ -33,6 +36,8 @@ const schemaRegister = Joi.object({
   subscription: Joi.string()
     .valid("starter", "pro", "business")
     .default("starter"),
+
+  // avatarURL: Joi.string(),
 });
 const schemaLogin = Joi.object({
   password: Joi.string().min(5).required(),
