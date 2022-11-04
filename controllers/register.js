@@ -10,8 +10,10 @@ const register = async (req, res) => {
   if (user) {
     throw RequestError(409, "Email in use");
   }
+
   const hashPassword = await bcrypt.hash(password, 10);
   const avatarURL = gravatar.url(email);
+
   const addNewUser = await User.create({
     email,
     password: hashPassword,
