@@ -1,5 +1,5 @@
 const path = require("path");
-const fs = require("fs/promises");
+
 const { User } = require("../models/users");
 const Jimp = require("jimp");
 
@@ -7,10 +7,10 @@ const avatarDir = path.join(__dirname, "../", "public", "avatars");
 const updateAvatar = async (req, res) => {
   const { _id } = req.user;
   const { path: tempUpload, originalname } = req.file;
+  console.log(req.file.path);
   const extention = originalname.split(".").pop();
   const fileName = `${_id}.${extention}`;
   const resultUpload = path.join(avatarDir, originalname);
-  await fs.rename(tempUpload, resultUpload);
 
   Jimp.read(tempUpload, (err, chocolate) => {
     if (err) throw err;
@@ -20,7 +20,7 @@ const updateAvatar = async (req, res) => {
 
   await User.findByIdAndUpdate(_id, { avatarURL });
 
-  req.status(200).json({ avatarURL });
+  res.status(200).json({ avatarURL });
 };
 
 module.exports = updateAvatar;
