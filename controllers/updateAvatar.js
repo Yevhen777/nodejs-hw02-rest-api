@@ -7,16 +7,17 @@ const avatarDir = path.join(__dirname, "../", "public", "avatars");
 const updateAvatar = async (req, res) => {
   const { _id } = req.user;
   const { path: tempUpload, originalname } = req.file;
-  console.log(req.file.path);
+
   const extention = originalname.split(".").pop();
   const fileName = `${_id}.${extention}`;
-  const resultUpload = path.join(avatarDir, originalname);
+  const resultUpload = path.join(avatarDir, fileName);
+
+  const avatarURL = path.join("avatars", fileName);
 
   Jimp.read(tempUpload, (err, chocolate) => {
     if (err) throw err;
-    chocolate.resize(250, 250).write(resultUpload);
+    return chocolate.resize(250, 250).write(resultUpload);
   });
-  const avatarURL = path.join("avatars", fileName);
 
   await User.findByIdAndUpdate(_id, { avatarURL });
 
