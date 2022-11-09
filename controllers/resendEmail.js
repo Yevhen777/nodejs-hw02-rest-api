@@ -6,7 +6,7 @@ const resendEmail = async (req, res) => {
   const { email } = req.body;
 
   const user = await User.findOne({ email });
-  if (user) {
+  if (!user) {
     throw RequestError(404);
   }
   const mail = {
