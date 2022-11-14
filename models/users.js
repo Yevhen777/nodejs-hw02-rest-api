@@ -1,5 +1,6 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
+// const { boolean } = require("joi");
 
 const userShema = new Schema(
   {
@@ -24,6 +25,14 @@ const userShema = new Schema(
     avatarURL: {
       type: String,
     },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      required: [true, "Verify token is required"],
+    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -42,4 +51,7 @@ const schemaLogin = Joi.object({
   email: Joi.string().email().required(),
 });
 
-module.exports = { User, schemaRegister, schemaLogin };
+const schemaVerify = Joi.object({
+  email: Joi.string().email().required(),
+});
+module.exports = { User, schemaRegister, schemaLogin, schemaVerify };
